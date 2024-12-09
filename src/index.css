@@ -303,11 +303,11 @@ p {
 	inset: 0%;
 }
 
-.bg-panel.first {
+.bg-panel:nth-child(1) {
 	background-color: var(--color-primary);
 }
 
-.bg-panel.second {
+.bg-panel:nth-child(2) {
 	background-color: var(--color-neutral-100);
 }
 

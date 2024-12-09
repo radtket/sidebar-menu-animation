@@ -1,12 +1,88 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useLayoutEffect } from "react";
+import { gsap } from "gsap";
+import CustomEase from "gsap/CustomEase";
+
+gsap.registerPlugin(CustomEase);
+
+CustomEase.create("main", "0.65, 0.01, 0.05, 0.99");
+
+gsap.defaults({
+  ease: "main",
+  duration: 0.7,
+});
 
 function App() {
   const [isOpen, setOpen] = useState(false);
   const app = useRef(null);
+  const tl = useRef();
 
   const onClick = useCallback(() => {
     setOpen(prev => !prev);
   }, []);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(".nav", { display: "none" });
+
+      tl.current = gsap.timeline();
+    }, app);
+
+    return () => ctx.revert();
+  }, []);
+
+  useLayoutEffect(() => {
+    tl.current = isOpen
+      ? tl.current
+          .clear()
+          .set(".nav", { display: "block" })
+          .set(".menu", { xPercent: 0 }, "<")
+          .fromTo(
+            ".menu-button p",
+            { yPercent: 0 },
+            { yPercent: -100, stagger: 0.2 }
+          )
+          .fromTo(".menu-button-icon", { rotate: 0 }, { rotate: 315 }, "<")
+          .fromTo(".overlay", { autoAlpha: 0 }, { autoAlpha: 1 }, "<")
+          .fromTo(
+            ".bg-panel",
+            { xPercent: 101 },
+            { xPercent: 0, stagger: 0.12, duration: 0.575 },
+            "<"
+          )
+          .fromTo(
+            ".menu-link",
+            { yPercent: 140, rotate: 10 },
+            { yPercent: 0, rotate: 0, stagger: 0.05 },
+            "<+=0.35"
+          )
+          .fromTo(
+            "[data-menu-fade]",
+            { autoAlpha: 0, yPercent: 50 },
+            { autoAlpha: 1, yPercent: 0, stagger: 0.04 },
+            "<+=0.2"
+          )
+      : tl.current
+          .clear()
+          .to(".overlay", { autoAlpha: 0 })
+          .to(".menu", { xPercent: 120 }, "<")
+          .to(".menu-button p", { yPercent: 0 }, "<")
+          .to(".menu-button-icon", { rotate: 0 }, "<")
+          .set(".nav", { display: "none" });
+  }, [isOpen]);
+
+  useLayoutEffect(() => {
+    const handleKeyDown = ({ key }) => {
+      if (key === "Escape" && isOpen) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown, true);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
 
   return (
     <main ref={app}>
@@ -123,65 +199,52 @@ function App() {
           <div className="overlay" onClick={onClick} />
           <nav className="menu">
             <div className="menu-bg">
-              <div className="bg-panel first" />
-              <div className="bg-panel second" />
+              <div className="bg-panel" />
+              <div className="bg-panel" />
               <div className="bg-panel" />
             </div>
             <div className="menu-inner">
               <ul className="menu-list">
-                <li className="menu-list-item">
-                  <a className="menu-link w-inline-block" href="/about">
-                    <p className="menu-link-heading">About us</p>
-                    <p className="eyebrow">01</p>
-                    <div className="menu-link-bg" />
-                  </a>
-                </li>
-                <li className="menu-list-item">
-                  <a className="menu-link w-inline-block" href="/work">
-                    <p className="menu-link-heading">Our work</p>
-                    <p className="eyebrow">02</p>
-                    <div className="menu-link-bg" />
-                  </a>
-                </li>
-                <li className="menu-list-item">
-                  <a className="menu-link w-inline-block" href="/services">
-                    <p className="menu-link-heading">Services</p>
-                    <p className="eyebrow">03</p>
-                    <div className="menu-link-bg" />
-                  </a>
-                </li>
-                <li className="menu-list-item">
-                  <a className="menu-link w-inline-block" href="/blog">
-                    <p className="menu-link-heading">Blog</p>
-                    <p className="eyebrow">04</p>
-                    <div className="menu-link-bg" />
-                  </a>
-                </li>
-                <li className="menu-list-item">
-                  <a className="menu-link w-inline-block" href="/contact">
-                    <p className="menu-link-heading">Contact us</p>
-                    <p className="eyebrow">05</p>
-                    <div className="menu-link-bg" />
-                  </a>
-                </li>
+                {[
+                  { href: "/about", text: "About us" },
+                  { href: "/work", text: "Our work" },
+                  { href: "/services", text: "Services" },
+                  { href: "/blog", text: "Blog" },
+                  { href: "/contact", text: "Contact us" },
+                ].map(({ href, text }, idx) => {
+                  return (
+                    <li key={href} className="menu-list-item">
+                      <a className="menu-link w-inline-block" href={href}>
+                        <p className="menu-link-heading">{text}</p>
+                        <p className="eyebrow">{"0".concat(idx + 1)}</p>
+                        <div className="menu-link-bg" />
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
               <div className="menu-details">
                 <p className="p-small" data-menu-fade="">
                   Socials
                 </p>
                 <div className="socials-row">
-                  <a className="p-large text-link" data-menu-fade="" href="#">
-                    Instagram
-                  </a>
-                  <a className="p-large text-link" data-menu-fade="" href="#">
-                    LinkedIn
-                  </a>
-                  <a className="p-large text-link" data-menu-fade="" href="#">
-                    X/Twitter
-                  </a>
-                  <a className="p-large text-link" data-menu-fade="" href="#">
-                    Awwwards
-                  </a>
+                  {[
+                    { href: "#", text: "Instagram" },
+                    { href: "#", text: "LinkedIn" },
+                    { href: "#", text: "X/Twitter" },
+                    { href: "#", text: "Awwwards" },
+                  ].map(({ href, text }) => {
+                    return (
+                      <a
+                        key={text}
+                        className="p-large text-link"
+                        data-menu-fade=""
+                        href={href}
+                      >
+                        {text}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             </div>
