@@ -88,15 +88,17 @@ function App() {
     <main ref={app}>
       <div className="shared-style-ui">
         <header className="header">
-          <div className="container">
+          <div className="container is--full">
             <nav className="nav-row">
               <a
                 aria-label="home"
+                className="nav-logo-row w-inline-block"
                 href="https://shared-style.supply/"
                 rel="noreferrer"
                 target="_blank"
               >
                 <svg
+                  className="nav-logo__wordmark"
                   fill="none"
                   viewBox="0 0 66 20"
                   width="100%"
@@ -120,6 +122,7 @@ function App() {
                   />
                 </svg>
                 <svg
+                  className="nav-logo__icon"
                   fill="none"
                   viewBox="0 0 160 160"
                   width="100%"
@@ -131,13 +134,13 @@ function App() {
                   />
                 </svg>
               </a>
-              <div>
+              <div className="nav-row__right">
                 <button className="menu-button" onClick={onClick} type="button">
                   <div className="menu-button-text">
-                    <p>Menu</p>
-                    <p>Close</p>
+                    <p className="p-large">Menu</p>
+                    <p className="p-large">Close</p>
                   </div>
-                  <figure className="icon-wrap">
+                  <div className="icon-wrap">
                     <svg
                       className="menu-button-icon"
                       fill="none"
@@ -170,7 +173,7 @@ function App() {
                         fill="currentColor"
                       />
                     </svg>
-                  </figure>
+                  </div>
                 </button>
               </div>
             </nav>
@@ -180,6 +183,7 @@ function App() {
 
       <section className="cloneable">
         <svg
+          className="shared-style-icon-svg"
           fill="none"
           viewBox="0 0 160 160"
           width="100%"
@@ -209,8 +213,8 @@ function App() {
                   { href: "/contact", text: "Contact us" },
                 ].map(({ href, text }, idx) => {
                   return (
-                    <li key={href}>
-                      <a className="menu-link" href={href}>
+                    <li key={href} className="menu-list-item">
+                      <a className="menu-link w-inline-block" href={href}>
                         <p className="menu-link-heading">{text}</p>
                         <p className="eyebrow">{"0".concat(idx + 1)}</p>
                         <div className="menu-link-bg" />
@@ -219,8 +223,10 @@ function App() {
                   );
                 })}
               </ul>
-              <div>
-                <p data-menu-fade="">Socials</p>
+              <div className="menu-details">
+                <p className="p-small" data-menu-fade="">
+                  Socials
+                </p>
                 <div className="socials-row">
                   {[
                     { href: "#", text: "Instagram" },
@@ -229,7 +235,12 @@ function App() {
                     { href: "#", text: "Awwwards" },
                   ].map(({ href, text }) => {
                     return (
-                      <a key={text} data-menu-fade="" href={href}>
+                      <a
+                        key={text}
+                        className="p-large text-link"
+                        data-menu-fade=""
+                        href={href}
+                      >
                         {text}
                       </a>
                     );
