@@ -1,8 +1,9 @@
-# React + Vite
+**Sidebar Menu Animation**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sleek sidebar menu showcasing smooth animations and interactive transitions. Built using React and modern animation libraries, this project demonstrates expertise in UI/UX design and component-based architecture to create engaging user interfaces.
 
-Currently, two official plugins are available:
+  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**GitHub Repository:** [radtket/sidebar-menu-animation](https://github.com/radtket/sidebar-menu-animation)
+
+**Live Demo:** [Sidebar Menu Animation](https://radtket.github.io/sidebar-menu-animation/)
